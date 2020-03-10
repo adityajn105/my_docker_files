@@ -1,0 +1,28 @@
+version: '2'
+servies:
+  nodeapp:
+    image: adityajn105/node_loginapp
+    ports:
+      - '80:3000' #webapp
+      - '5000:5000' #vscode
+    networks:
+      - node_network #rquires non-default bridge network to communicate
+    environment:
+      - PASS="aditya" #password for vscode
+    depends_on:
+      - mongo
+
+  mongo: #requires DNS named mongo
+    image: mongo:latest
+    volumes:
+      - nodeapp-db:/data/db #volume names
+      - nodeapp-configdb:/data/configdb #volume names
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongouser #currently have no effect
+      - MONGO_INITDB_ROOT_PASSWORD=mongopass #currently have no effect
+    networks:
+      - node_network
+
+networks:
+  node_network:
+    driver: bridge

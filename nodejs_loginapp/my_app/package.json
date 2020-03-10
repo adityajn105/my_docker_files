@@ -1,0 +1,32 @@
+{
+  "name": "studentportal",
+  "version": "1.0.0",
+  "description": "login portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Login"
+  ],
+  "author": "Aditya Jain",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "latest",
+    "body-parser": "latest",
+    "compression": "latest",
+    "cookie-parser": "latest",
+    "ejs": "latest",
+    "express": "latest",
+    "express-fileupload": "latest",
+    "express-session": "latest",
+    "file-type": "latest",
+    "helmet": "latest",
+    "mongojs": "latest",
+    "mongoose": "latest",
+    "mongoose-auto-increment": "latest",
+    "mongoose-unique-validator": "latest",
+    "mongoose-validation-error-transform": "latest",
+    "node-datetime": "latest"
+  }
+}
