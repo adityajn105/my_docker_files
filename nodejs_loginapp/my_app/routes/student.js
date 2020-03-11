@@ -4,6 +4,7 @@
 var express = require('express');
 var router=express.Router();
 var globals = require('./GlobalVariables');
+var bcrypt=  require('bcryptjs');
 var mongojs = require('mongojs');
 var fileUpload = require('express-fileupload');
 var path = require('path');
@@ -17,7 +18,6 @@ router.post('/',function(req,res,next){
             res.render('home',{status:true, error:"Email not registered yet!",prev:{}})
         }
         else{
-            console.log(req.body.email,'found')
             if(foundData) {
                 bcrypt.compare(req.body.passwd, foundData.password, function (err, result) {
                     if (!result) {
@@ -36,4 +36,27 @@ router.post('/',function(req,res,next){
         }
     });
 });
+
+router.get('/',function(req,res,next){
+    StudentRegistrationModel.findOne({uuid:req.session.uuid},function (err,foundData) {
+        if(err){
+            res.render('home',{status:true, error:"Email not registered yet!",prev:{}})
+        }
+        else{
+            if(foundData) {
+                res.render('studentportal',{status: true, type: 1, data: foundData } );
+            }
+            else{
+                res.render("home",{status:true,error:"Email or Password is not correct.",prev:req.body})
+            }
+        }
+    });
+});
+
+router.get('/logout',function(req,res,next){
+    req.session.uuid = null;
+    req.session.type = null;
+    res.redirect('/');
+});
+
 module.exports = router;

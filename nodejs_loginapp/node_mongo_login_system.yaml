@@ -10,7 +10,7 @@ services:
     environment:
       - PASS=aditya #password for vscode
     volumes:
-      - nodeapp-photodb:/home/node/profilephotos #store uploaded photos
+      - nodeapp-photodb:/home/node/profilephotos
     depends_on:
       - mongo
 

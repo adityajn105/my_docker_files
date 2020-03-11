@@ -11,7 +11,7 @@ router.get('/',function(req,res,next){
     res.render('register', {status: false, type:1, msg:''});
 });
 
-router.post('/student',function(req,res,next){
+router.post('/',function(req,res,next){
     var student = new StudentRegistrationModel();
     student.firstname = req.body.firstname;
     student.lastname = req.body.lastname;
@@ -25,9 +25,6 @@ router.post('/student',function(req,res,next){
         return;
     }
 
-    //get profile photo object
-    var profilephoto = req.files.profile;
-
     //generate hash from password
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(req.body.passwd, salt, function (err, hash) {
@@ -38,9 +35,11 @@ router.post('/student',function(req,res,next){
                     res.render('register', {status: true, type: 1, error: err.message.split(','), prev:req.body});
                 }
                 else {
-                    if(profilephoto){
+                    if(req.files){
+                      profilephoto = req.files.profile;
                       profilephoto.mv(__dirname +"/../profilephotos/"+req.body.aadhaar, function(err) {
                           if (err) console.log("Upload failed : "+err);
+                          else{ console.log("Upload Successful")}
                       });
                     }
                     req.session.uuid = savedObject.uuid;
@@ -50,10 +49,6 @@ router.post('/student',function(req,res,next){
             });
         });
     });
-});
-
-router.post('/supplier',function(req,res,next){
-
 });
 
 module.exports = router;

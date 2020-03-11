@@ -10,10 +10,10 @@ var helmet = require('helmet');
 
 var home = require('./routes/home');
 var register = require('./routes/register')
-var api = require('./routes/api');
+var student = require('./routes/student');
 
 var port = 3000;
-var app = express();	//initialize app
+var app = express();    //initialize app
 
 //view engine
 app.set('views',path.join(__dirname,'views'));
@@ -43,11 +43,17 @@ app.use(sessions({
     }
 }));
 
+app.get('/profilephotos/:imagename', function(req, res){
+    var imagename = req.params.imagename;
+    var imagepath = __dirname+"/profilephotos/"+imagename;
+    res.sendFile(imagepath)
+});
+
 app.use('/',home);
 app.use('/home',home)
 app.use('/register',register)
-app.use('/api',api)
+app.use('/student',student)
 
 app.listen(port,function(){
-	console.log("Server Started on port "+port);
+    console.log("Server Started on port "+port);
 });

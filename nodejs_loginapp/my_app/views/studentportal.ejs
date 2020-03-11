@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> Student Portal | SOCH Nemesis </title>
+    <title> Student Portal </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -45,7 +45,7 @@
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                <li><a href="/student/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </ul>
         </div>
     </div>
@@ -53,8 +53,8 @@
 <div class="container-fluid" style="padding: 2% 0% 10% 0%">
         <div class="row col-md-10 col-md-offset-1 well well-lg">
             <h2>Students Portal<br><br></h2>
-            <div class="col-md-3">
-                <img class="img-responsive img-circle" src="/<%=profile%>" style="width: 50%;height: 50%">
+            <div class="col-md-1">
+                <img src="../<%=data.profile%>" class="img-responsive">
             </div>
             <div class="col-md-6" style="font-size: large">
                 <strong>Students Name : </strong><%=data.firstname%> <%=data.lastname%><br>
@@ -64,11 +64,7 @@
                 <strong>Aadhaar : </strong><%=data.aadhaar%><br>
                 <strong>Date of Birth : </strong><%=data.dob%><br>
             </div>
-            <div class="col-md-3">
-                <img class="img-responsive" src="/qr/<%=enrollment%>" style="width: 50%;height: 50%">
-            </div>
         </div>
-        <%}%>
 </div>
 </body>
 </html>

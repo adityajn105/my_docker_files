@@ -14,4 +14,4 @@ EXPOSE 8888 3000 5000
 ENV PASSWORD aditya
 
 COPY ./* /home/
-CMD ["bash", "/home/docker_entrypoint.sh"]
+CMD ["bash", "/home/docker-entrypoint.sh"]
