@@ -1,6 +1,6 @@
 FROM tensorflow/tensorflow:latest-py3
 
-RUN python -m pip install --quiet --no-cache-dir flask pandas scikit-learn notebook
+RUN python -m pip install --quiet --no-cache-dir matplotlib flask pandas scikit-learn notebook
 
 WORKDIR /home
 
