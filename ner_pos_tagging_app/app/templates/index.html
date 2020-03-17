@@ -1,0 +1,60 @@
+<html>
+ 	<head>
+ 		<meta name="csrf-token" content="csrf-token">
+ 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<script>
+			$(document).ready(function(){
+			  $('[data-toggle="popover"]').popover(); 
+			});
+		</script>
+	</head>
+    <body>
+    	<div class="container">
+    		<div class="row">
+	    		<div class="col-md-12  text-center" style="margin: 2% 0% 2% 0%;">
+	    			<h1>POS/NER Tagging</div>
+	    	</div>
+    		<div class="row">
+				<form method="post" class="col-md-12" action="/pos_ner"> 
+					<label for="sentence">Comment:</label>
+					<textarea class="form-control" rows="5" id="sentence" name="sentence"> {{data.text}} </textarea>
+
+					<div class="row text-center" style="margin: 1%">
+						<div class="col-md-6">
+							<button type="submit" style="background: #87ae7c; width: 100%" name="type" value="pos" class="btn">
+							Tag above Text (POS) </button>
+						</div>
+						<div class="col-md-6">
+							<button type="submit" style="background: #7ac5cd; width: 100%" name="type" value="ner" class="btn">
+							Find Named Entities (NER)</button>
+						</div>
+					</div>
+				</form>	
+			</div>
+			<div class="row col-md-12 text-center"></div>
+				{% if data.status %}
+					{% for word, tag, description, color in data.tags %}
+						{% if tag=="O" %}
+							<button href="#" class="btn" title="{{tag}}" 
+							style="background-color: {{color}} ; font-size: large; margin-bottom:1%">{{word}}</button>
+						{% else %}
+							<button href="#" class="btn" data-toggle="popover" title="{{tag}}" data-content="{{description}}" 
+							data-trigger="hover" style="background-color: {{color}} ; font-size: large; margin-bottom:1%" 
+							data-placement="bottom">{{word}}</button>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+	    	<div class="row" style="margin-top: 2%">
+	    		<div class="col-md-12 text-center">
+	    			<a href="#">
+	    				<button class="btn btn-success">View Project/Code on Github.</button>
+	    			</a>
+	    		</div>
+	    	</div>
+    	</div>
+	</body>
+</html>
