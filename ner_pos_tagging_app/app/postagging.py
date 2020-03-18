@@ -1,6 +1,7 @@
 from tensorflow.keras.models import load_model
 import pickle as pkl
 import numpy as np
+import re
 
 MAX_SEQ_LEN = 40
 VOCAB_SIZE = 400001
@@ -17,9 +18,8 @@ pos_dict = { 0: '<pad>', 1: 'NNS', 2: 'IN', 3: 'VBP', 4: 'VBN', 5: 'NNP', 6: 'TO
 34: 'EX', 35: 'RBS', 36: 'LRB', 37: 'RRB', 38: '$', 39: 'RBR', 40: ';', 41: 'UH', 42: 'FW'}
 
 
-def getTagsSentence( sentence ):
+def getTagsSentence( words ):
     inp_seq = []
-    words = sentence.split()
     for word in words:
         inp_seq.append( tokens.get( word.lower(), UNK_IDX ) )
     ln = len(inp_seq)
@@ -30,20 +30,17 @@ def getTagsSentence( sentence ):
     return list(zip( words, tags ))
 
 def getPosWhole( para ):
-    sentences = []
-    sent = []
-    for c in list(para):
-        if c in [';', '(', ')' ]: 
-            sent.append( f' {c} ' )
-        elif c in ['!','.','?', ',']:
-            sent.append( f' {c}' )
-            sentences.append( ("".join(sent)).strip() )
-            sent=[]
-        else:
-            sent.append(c)
-    if len(sent)>0: sentences.append(("".join(sent)).strip())
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', para)
     tags = []
     for sentence in sentences:
-        sent_tags = getTagsSentence(sentence) 
-        tags.extend( sent_tags )
+        sentence = re.sub( "'s|’s", " 's", sentence.strip())
+        sentence = sentence[:-1]+" "+sentence[-1]
+        final = []
+        for c in sentence:
+            if c in [ '(', ')', ';', ',', '!', ':', '-', '—' ]: final.append( f' {c} ' )
+            else: final.append(c)
+        sentence = "".join(final).split()
+        sent_batches = (len(sentence)//40)+1
+        for i in range(sent_batches):
+            tags.extend( getTagsSentence(sentence[ i*40: (i+1)*40 ]) )
     return tags

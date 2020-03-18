@@ -1,6 +1,7 @@
 from tensorflow.keras.models import load_model
 import pickle as pkl
 import numpy as np
+import re
 
 MAX_SEQ_LEN = 40
 VOCAB_SIZE = 400001
@@ -15,10 +16,8 @@ tokens = pkl.load( open('saved_items/tokens.pkl','rb') )
 ner_dict = {0: 'O', 1: 'B-geo', 2: 'B-gpe', 3: 'B-per', 4: 'I-geo', 5: 'B-org', 6: 'I-org', 7: 'B-tim', 8: 'B-art',
  9: 'I-art', 10: 'I-per', 11: 'I-gpe', 12: 'I-tim', 13: 'B-nat', 14: 'B-eve', 15: 'I-eve', 16: 'I-nat'}
 
-
-def getTagsSentence( sentence ):
+def getTagsSentence( words ):
     inp_seq = []
-    words = sentence.split()
     for word in words:
         inp_seq.append( tokens.get( word.lower(), UNK_IDX ) )
     ln = len(inp_seq)
@@ -29,20 +28,17 @@ def getTagsSentence( sentence ):
     return list(zip( words, tags ))
 
 def getNerWhole( para ):
-    sentences = []
-    sent = []
-    for c in list(para):
-        if c in [';', '(', ')' ]: 
-            sent.append( f' {c} ' )
-        elif c in ['!','.','?', ',']:
-            sent.append( f' {c}' )
-            sentences.append( ("".join(sent)).strip() )
-            sent=[]
-        else:
-            sent.append(c)
-    if len(sent)>0: sentences.append(("".join(sent)).strip())
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', para)
     tags = []
     for sentence in sentences:
-        sent_tags = getTagsSentence(sentence) 
-        tags.extend( sent_tags )
+        sentence = re.sub( "'s|’s", " 's", sentence.strip())
+        sentence = sentence[:-1]+" "+sentence[-1]
+        final = []
+        for c in sentence:
+            if c in [ '(', ')', ';', ',', '!', ':', '-', '—' ]: final.append( f' {c} ' )
+            else: final.append(c)
+        sentence = "".join(final).split()
+        sent_batches = (len(sentence)//40)+1
+        for i in range(sent_batches):
+            tags.extend( getTagsSentence(sentence[ i*40: (i+1)*40 ]) )
     return tags

@@ -71,29 +71,47 @@ ner_color = { 'O' : ( "na", '#ededfb'),
 }
 
 
-@app.route('/')
+@app.route('/', methods = ['POST','GET'])
 def home():
-    return render_template('index.html',data = {'status':False, 'text':"" }) 
-
-
-@app.route('/pos_ner', methods = ['POST'])
-def pos_tag():
     if request.method == 'POST':
-        sentences = request.form.get('sentence')
+        sentences = request.form.get('sentence').strip()
         typ = request.form.get('type')
         if typ=='pos':
             tags = getPosWhole(sentences)
             tags = [ ( word, tag, *pos_color[tag] ) for word, tag in tags ]
             return render_template('index.html', data = {'status':True, 'tags':tags, 'text':sentences })
-        else:
+        elif typ=='ner':
             tags = getNerWhole(sentences)
             tags = [ ( word, tag, *ner_color[tag] ) for word, tag in tags ]
             return render_template('index.html', data = {'status':True, 'tags':tags, 'text':sentences })
+        else:
+            return render_template('index.html', data = {'status':False, 'text':""})
+    elif request.method == 'GET':
+        sentences = request.args.get('sentence')
+        typ = request.args.get('type')
+        if typ=='pos' and sentences != None:
+            tags = getPosWhole(sentences.strip())
+            return jsonify({
+                'status': True,
+                'message': 'POS tags generated',
+                'tags': tags
+            }); 
+        elif typ=='ner' and sentences != None:
+            tags = getNerWhole(sentences.strip())
+            return jsonify({
+                'status': True,
+                'message': 'NER tags generated',
+                'tags': tags
+            }); 
+        else:
+            return jsonify({
+                'status': False,
+                'message': 'Invalid request',
+                'tags': []
+            });
     else:
-        return redirect('/')
+         return render_template('index.html', data = {'status':False, 'text':""})
 
-
-print("Application ready to use")
-        
 if __name__=='__main__':
-    app.run(host = '0.0.0.0', debug=True, port = int(3000))
+    app.run(host = '0.0.0.0', port = int(80))
+    print("Application ready to use")

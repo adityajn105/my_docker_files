@@ -18,8 +18,8 @@
 	    			<h1>POS/NER Tagging</div>
 	    	</div>
     		<div class="row">
-				<form method="post" class="col-md-12" action="/pos_ner"> 
-					<label for="sentence">Comment:</label>
+				<form method="post" class="col-md-12" action="/"> 
+					<label for="sentence">Your Text:</label>
 					<textarea class="form-control" rows="5" id="sentence" name="sentence"> {{data.text}} </textarea>
 
 					<div class="row text-center" style="margin: 1%">
@@ -48,9 +48,34 @@
 					{% endfor %}
 				{% endif %}
 			</div>
-	    	<div class="row" style="margin-top: 2%">
-	    		<div class="col-md-12 text-center">
-	    			<a href="#">
+	    	<div class="row">
+                <div class="col-md-12 text-center" style="margin-top: 1%">
+					<a href="#" data-toggle="modal" data-target="#myModal">Use this as an API</a>
+				</div>
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog modal-lg">
+					
+					  <!-- Modal content-->
+					  <div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Consuming app as an API</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+						  <p>For Part of Speech Tagging</p>
+						  <code> curl -X GET localhost?sentence=This+application+is+made+by+Aditya.&type=pos </code>
+						  <br><br>
+						  <p>For Named Entity Recognition</p>
+						  <code> curl -X GET localhost?sentence=This+application+is+made+by+Aditya.&type=ner </code>
+						  <br><br>
+						  Response will be Json with status, message and tags.
+						</div>
+						<div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> </div>
+					  </div>
+					</div>
+				</div>
+                <div class="col-md-12 text-center" style="margin-top: 1%">
+	    			<a href="https://github.com/adityajn105/NLP-projects">
 	    				<button class="btn btn-success">View Project/Code on Github.</button>
 	    			</a>
 	    		</div>
