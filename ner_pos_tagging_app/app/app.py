@@ -89,7 +89,9 @@ def home():
     elif request.method == 'GET':
         sentences = request.args.get('sentence')
         typ = request.args.get('type')
-        if typ=='pos' and sentences != None:
+        if typ==None and sentences==None:
+             return render_template('index.html', data = {'status':False, 'text':""})
+        elif typ=='pos' and sentences != None:
             tags = getPosWhole(sentences.strip())
             return jsonify({
                 'status': True,
@@ -102,7 +104,7 @@ def home():
                 'status': True,
                 'message': 'NER tags generated',
                 'tags': tags
-            }); 
+            });
         else:
             return jsonify({
                 'status': False,
