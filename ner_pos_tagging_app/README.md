@@ -17,12 +17,12 @@ Get app in your browser by visiting `http://localhost`.
 *Alternatively you can use app as ReST Api*
 
 * For Named entity recognition use.
-    
-    curl -X GET localhost?sentence=This+application+is+made+by+Aditya.&type=ner
+
+        curl -X GET "http://localhost?sentence=This+application+is+made+by+Aditya.&type=ner"
 
 * For Part of Speech Tagging use:
     
-    curl -X GET localhost?sentence=This+application+is+made+by+Aditya.&type=pos
+        curl -X GET "http://localhost?sentence=This+application+is+made+by+Aditya.&type=pos"
 
 * It will return a json output as,
     ```

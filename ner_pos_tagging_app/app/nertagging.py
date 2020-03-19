@@ -32,10 +32,11 @@ def getNerWhole( para ):
     tags = []
     for sentence in sentences:
         sentence = re.sub( "'s|’s", " 's", sentence.strip())
+        sentence = re.sub( "s' ", "s ' ", sentence.strip())
         sentence = sentence[:-1]+" "+sentence[-1]
         final = []
         for c in sentence:
-            if c in [ '(', ')', ';', ',', '!', ':', '-', '—' ]: final.append( f' {c} ' )
+            if c in [ '(', ')', ';', ',', '!', ':', '-', '—', '"' ]: final.append( f' {c} ' )
             else: final.append(c)
         sentence = "".join(final).split()
         sent_batches = (len(sentence)//40)+1
