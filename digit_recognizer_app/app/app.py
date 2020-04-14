@@ -21,7 +21,7 @@ def home():
         global stats;
         stats = pkl.load(fp)
         total = sum(stats.values())
-        if total!=0: acc = f"{ 100*stats['yes']/total:.2f}"
+        if total!=0: acc = f"{ 100*stats['yes']/total:.2f} ({stats['yes']}/{total})"
     return render_template('index.html',data = {'status':False, 'accuracy':acc} ) 
 
 @app.route('/charrecognize', methods = ['POST'])
@@ -29,14 +29,15 @@ def predict():
     if request.method == 'POST':
         data = request.get_json()
         imagebase64 = data['image']
-        imgbytes = base64.b64decode(imagebase64)
-        decoded = np.frombuffer(imgbytes, np.uint8)
-        img = cv2.imdecode(decoded,-1)
-        img = cv2.resize(img, (28, 28))
-        img = np.sum(255-img, axis=-1)
-        img = img.reshape(1,28,28,1).astype('float32')/255
+        binary = base64.b64decode(imagebase64)
+        img = np.asarray(bytearray(binary), dtype="uint8")
+        img = 255-cv2.imdecode(img, 0)
+        img = (cv2.resize(img, (20, 20))>127)*1
+        final = np.zeros( (28,28) )
+        final[ 4:24,4:24 ] = img
+        final = final.reshape(1,28,28,1)
         return jsonify({
-            'prediction': predict_digit(img),
+            'prediction': predict_digit(final),
             'status': True
         });
 
