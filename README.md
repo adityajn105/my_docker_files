@@ -102,7 +102,7 @@ Build List
 
 * To build a image from its Dockerfile (-f to use custom name)
 
-        docker image build -t user/repo:tag -f Dockerfile
+        docker image build -t user/repo:tag -f Dockerfile .
 
 * To tag a image with different name or tag
 
