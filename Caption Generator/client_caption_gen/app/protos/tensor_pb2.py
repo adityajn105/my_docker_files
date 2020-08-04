@@ -12,9 +12,9 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import resource_handle_pb2 as resource__handle__pb2
-import tensor_shape_pb2 as tensor__shape__pb2
-import types_pb2 as types__pb2
+from . import resource_handle_pb2 as resource__handle__pb2
+from . import tensor_shape_pb2 as tensor__shape__pb2
+from . import types_pb2 as types__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
