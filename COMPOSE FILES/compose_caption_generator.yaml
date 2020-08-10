@@ -5,7 +5,7 @@ services:
     ports:
       - '80:80' #webapp
     networks:
-      - mynetwork #rquires non-default bridge network to communicate
+      - mynet #rquires non-default bridge network to communicate
     environment:
       - TF_SERVER_IP=tf_server #server dns
       - TF_SERVER_PORT=8500
@@ -15,7 +15,7 @@ services:
   tf_server: #requires DNS named tf_server
     image: adityajn105/tf_serving_caption_gen:latest
     networks:
-      - mynetwork
+      - mynet
 
 networks:
   mynet:

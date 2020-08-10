@@ -9,13 +9,12 @@ import base64
 import numpy as np
 import cv2
 import os
+import sys
 from PIL import Image
-
-import logging
 
 from api import CaptionPredictionService
 
-service = CaptionPredictionService( host=os.environ.get('TF_SERVER_IP', 'localhost'), 
+service = CaptionPredictionService( host=os.environ.get('TF_SERVER_IP', 'tf_server'), 
 		port = int(os.environ.get('TF_SERVER_PORT', '8500')) )
 
 idx2word = {}
@@ -25,7 +24,7 @@ with open('cap_gen_vocab.txt', 'r') as fp:
 		word = line.strip()
 		idx2word[idx] = word
 		idx+=1
-	print(f'Vocabulary of size {idx} loaded.')
+	print(f'Vocabulary of size {idx} loaded.', file=sys.stdout)
 
 app = Flask(__name__)
 
@@ -47,11 +46,14 @@ def home():
 		
 
 		words = []
-		for word in [5, 6, 10, 56, 100, 1024, 830, 99, 34, 98]: #service.predict(img):
-			print(word, end=" ")
+		nos = []
+		for word in service.predict(img):
 			word = np.argmax(word)
-			if word > 2: words.append( idx2word[word] )
-
+			nos.append(word)
+			if word > 2: 
+				words.append( idx2word[word] )
+		print( " ".join(words), file=sys.stdout )
+		print( nos, file=sys.stderr )
 		return render_template('index.html', data={ 'status':True, 'img': str(image_string)[2:-1], 'caption': " ".join(words) })
 	else:
 		return render_template('index.html', data={ 'status':False })

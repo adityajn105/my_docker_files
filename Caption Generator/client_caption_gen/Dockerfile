@@ -6,8 +6,8 @@ RUN conda install -q -y numpy=1.18.1 Pillow=5.4.1 opencv=3.4.2 \
 
 COPY app /home/app
 
-ENV TF_SERVER_IP
-ENV TF_SERVER_PORT
+ENV TF_SERVER_IP tf_server
+ENV TF_SERVER_PORT 8500
 
 WORKDIR /home/app
 
