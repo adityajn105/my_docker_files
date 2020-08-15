@@ -50,7 +50,7 @@ class CaptionPredictionService:
 	def predict(self, measurement, timeout=10):
 		request = PredictRequest()
 		request.model_spec.name = "caption_generator"
-		request.inputs['input_1'].CopyFrom( self.make_tensor_proto( measurement.reshape(1, 224, 224, 3)).astype(np.float32) )
+		request.inputs['input_1'].CopyFrom( self.make_tensor_proto( measurement.reshape(1, 224, 224, 3).astype(np.float32) ))
 		request.inputs['input_5'].CopyFrom( self.init_token )
 		request.inputs['input_2'].CopyFrom( self.init_h_c )
 		request.inputs['input_3'].CopyFrom( self.init_h_c )
