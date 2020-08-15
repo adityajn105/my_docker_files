@@ -28,21 +28,29 @@ class CaptionPredictionService:
 			print('Connection Unsuccessful', file=sys.stderr)
 
 		self.stub = PredictionServiceStub(self.channel)
-		self.init_token = self.tensor_proto_from_measurement( np.array([[1]]).flatten(), (1, 1))
-		self.init_h_c =  self.tensor_proto_from_measurement( np.zeros( (1, 512) ).flatten(), (1, 512))
+		self.init_token = self.make_tensor_proto( np.array([[1]], dtype=np.float32) )
+		self.init_h_c =  self.make_tensor_proto( np.zeros((1, 512), dtype=np.float32) )
 
 
-	def tensor_proto_from_measurement(self, measurement, shape):
-		dims = [TensorShapeProto.Dim(size=dim) for dim in shape]
-		return TensorProto(
-            dtype = DT_FLOAT,
-            tensor_shape = TensorShapeProto(dim=dims),
-            string_val=[bytes(measurement)])
+	def make_tensor_proto(self, data):
+	    # data should be a float32 numpy array
+	    shape = data.shape
+	    dims = [TensorShapeProto.Dim(size=i) for i in shape]
+	    
+	    proto_shape= TensorShapeProto(dim=dims)
+	    proto_dtype = DT_FLOAT
+
+	    tensor_proto = TensorProto(
+	        dtype=proto_dtype,
+	        tensor_shape=proto_shape)
+	    tensor_proto.tensor_content = data.tostring()
+	    return tensor_proto
+
 
 	def predict(self, measurement, timeout=10):
 		request = PredictRequest()
 		request.model_spec.name = "caption_generator"
-		request.inputs['input_1'].CopyFrom( self.tensor_proto_from_measurement(measurement.flatten(), (1, 224, 224, 3)) )
+		request.inputs['input_1'].CopyFrom( self.make_tensor_proto( measurement.reshape(1, 224, 224, 3)).astype(np.float32) )
 		request.inputs['input_5'].CopyFrom( self.init_token )
 		request.inputs['input_2'].CopyFrom( self.init_h_c )
 		request.inputs['input_3'].CopyFrom( self.init_h_c )

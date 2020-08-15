@@ -1,27 +1,25 @@
-# [Caption Generation App using gRPC](https://hub.docker.com/r/adityajn105/node_loginapp)
+# [Caption Generation server and client](https://github.com/adityajn105/my_docker_files/tree/master/Caption%20Generator)
 
-A app to  
-
-Currently it provides a register/login system with photo uploads etc. vscode is running on port 5000 while application is hosted on port 3000.
+Setup Caption Generation tensorflow/serving API and a flask WebApp to consume that using gRPC interface.
 
 ## Usage
-You can use [docker-compose file](https://github.com/adityajn105/my_docker_files/blob/master/nodejs_loginapp/node_mongo_login_system.yaml) which will setup whole thing for you, change PASS in compose file to your password.:
+You can use [docker-compose file](https://github.com/adityajn105/my_docker_files/blob/master/Caption%20Generator/compose_caption_generator.yaml) which will setup whole thing for you.
 
-	docker-compose -f node_mongo_login_system.yaml 
+	docker-compose -f compose_caption_generator.yaml up
 
 Alternatively you can run following commands to setup whole environment.
 
-	docker pull adityajn105/node_loginapp:latest
-	
-	docker pull mongo
-	
-	docker network create node_network --driver bridge
-	
-	docker run -d --network node_network -v nodeapp-db:/data/db -v nodeapp-configdb:/data/configdb mongo:latest
+	docker image pull adityajn105/tf_serving_caption_gen:latest
 
-	docker run -d -p 80:3000 -p 5000:5000 --network node_network -e PASS=password -v nodeapp-photodb:/home/node/profilephotos adityajn105/node_loginapp:latest
+	docker image pull adityajn105/client_caption_gen:latest
+	
+	docker network create --driver bridge mynetwork
 
-Get vscode in your browser by visiting `http://localhost:5000`.
+	docker container run -d --network=mynetwork --network-alias=tf_server adityajn105/tf_serving_caption_gen:latest
+		
+	docker container run -d -p 80:80 --network=mynetwork -e TF_SERVER_IP=tf_server adityajn105/client_caption_gen:latest
+
+Visit the app on `http:localhost`
 
 ## Contributors
 * [Aditya Jain](https://adityajain.me)

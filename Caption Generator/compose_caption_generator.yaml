@@ -18,5 +18,5 @@ services:
       - mynetwork
 
 networks:
-  mynet:
+  mynetwork:
     driver: bridge

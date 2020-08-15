@@ -10,7 +10,7 @@ Currently it provides a register/login system with photo uploads etc. vscode is 
 ## Usage
 You can use [docker-compose file](https://github.com/adityajn105/my_docker_files/blob/master/nodejs_loginapp/node_mongo_login_system.yaml) which will setup whole thing for you, change PASS in compose file to your password.:
 
-	docker-compose -f node_mongo_login_system.yaml 
+	docker-compose -f node_mongo_login_system.yaml up
 
 Alternatively you can run following commands to setup whole environment.
 
