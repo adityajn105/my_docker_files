@@ -21,5 +21,10 @@ Alternatively you can run following commands to setup whole environment.
 
 Visit the app on `http:localhost`
 
+
+## Screenshot
+
+![](images/test.png)
+
 ## Contributors
 * [Aditya Jain](https://adityajain.me)
